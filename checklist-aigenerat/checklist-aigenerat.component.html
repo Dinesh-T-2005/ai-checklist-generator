@@ -1,0 +1,149 @@
+<main class="container">
+  <div class="glass-card">
+    <!-- <header class="header">
+      <div class="header-content">
+        <h1 id="app-title">AI Onboarding Assistant</h1>
+        <p>Create customized onboarding checklists with AI assistance</p>
+      </div>
+    </header> -->
+
+    <div class="content">
+      <!-- INPUT SECTION (UPDATED FOR TITLE + DESCRIPTION) -->
+      <section class="input-section">
+        <h3>📝 AI Document Generator</h3>
+
+        <!-- TITLE INPUT -->
+        <input type="text" class="title-input" placeholder="Enter document title..." [(ngModel)]="docTitle" />
+
+        <!-- DESCRIPTION INPUT -->
+        <textarea id="doc-description" class="prompt-input" rows="4" [(ngModel)]="docDescription"
+          placeholder="Enter description for the document..."></textarea>
+
+        <!-- GENERATE BUTTON -->
+        <button id="generate-btn" class="generate-btn" [class.disabled]="isDisabled" (click)="generateDocument()"
+          [disabled]=" generating || !docTitle || !docDescription">
+          <span id="generate-text">
+            {{ generating ? "Generating..." : "Generate Document" }}
+          </span>
+        </button>
+      </section>
+
+      <!-- SUCCESS MESSAGE -->
+      <div id="success-message" class="success-message" *ngIf="saveSuccess">
+        ✅ Template saved successfully!
+      </div>
+
+      <!-- GENERATED CHECKLIST OUTPUT -->
+      <section id="checklist-section" class="checklist-section" *ngIf="checklistTemplate && showDeleteModal">
+        <div class="checklist-header">
+          <h3 class="checklist-title">📋 Generated Checklist</h3>
+
+          <input id="template-name" class="template-name-input" placeholder="Enter template name..."
+            [(ngModel)]="checklistTemplate.templateName" />
+        </div>
+
+        <div class="checklist-body">
+          <div id="checklist-items">
+            <div class="checklist-item" *ngFor="let it of checklistTemplate.checklist; index as i">
+              <input class="item-name" [(ngModel)]="it.name" placeholder="Task name" />
+              <input class="item-cat" [(ngModel)]="it.category" placeholder="Category" />
+              <!-- <label class="mandatory-toggle">
+                <input type="checkbox" [(ngModel)]="it.isMandatory" />
+                Mandatory
+              </label> -->
+              <button class="remove-btn" (click)="removeItem(i)">
+                ✖ Remove
+              </button>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="add-item-btn" class="add-btn" (click)="addItem()">
+              ➕ Add Item
+            </button>
+
+            <button id="save-btn" class="save-btn" (click)="saveTemplate()"
+              [disabled]="!checklistTemplate.templateName">
+              💾 <span id="save-text">Save Template</span>
+            </button>
+
+            <button id="assign-btn" class="assign-btn" (click)="colse()">
+              close
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAVED TEMPLATES -->
+      <section class="templates-section">
+        <h4>📚 Saved Templates</h4>
+
+        <div id="templates-list" class="template-list" *ngIf="templates.length; else emptyState">
+          <div class="template-card" *ngFor="let t of templates">
+            <div class="template-main">
+              <h3>{{ t.templateName }}</h3>
+              <p class="template-meta">
+                {{ t.industry || "General" }}
+              </p>
+            </div>
+
+            <div class="template-actions">
+              <button (click)="useTemplate(t)">Use Template</button>
+              <!-- <button (click)="DeleteTemplate(t.templateId)">Remove</button> -->
+            </div>
+          </div>
+        </div>
+        <!-- <div class="page">
+          <mat-paginator
+            [length]="total"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[5, 30, 50, 70, 100]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </div> -->
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <h3>No templates yet</h3>
+            <p>Generate your first checklist to get started!</p>
+          </div>
+        </ng-template>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="ai-modal" *ngIf="aiModalOpen" (click)="closeAiModal()">
+  <div class="ai-modal__card" (click)="$event.stopPropagation()">
+    <div class="ai-modal__header">
+      <h3>Technical Interview AI</h3>
+    </div>
+    <div class="ai-modal__body">
+      <table class="ai-usage">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th class="num">Used</th>
+            <th class="num">Available</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of aiModalData">
+            <td>{{ r.label }}</td>
+            <td class="num">{{ r.used }}</td>
+            <td class="num">{{ r.available }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ai-modal__hint">Closes automatically in 10s</div>
+    </div>
+
+    <div class="ai-modal__actions">
+      <button class="btn" (click)="closeAiModal()">OK</button>
+    </div>
+  </div>
+</div>
+<app-loader *ngIf="isLoading"></app-loader>
