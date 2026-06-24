@@ -171,15 +171,15 @@ Displays AI-generated onboarding items in editable form:
 
 ### AI Document Generator
 
-![AI Document Generator](./screenshots/ai-document-generator.png)
+![AI Document Generator](./checklist/ai-document-generator.png)
 
 ### Generated Checklist Editor
 
-![Generated Checklist](./screenshots/generated-checklist.png)
+![Generated Checklist](./checklist/generated-checklist.png)
 
 ### Saved Templates
 
-![Saved Templates](./screenshots/saved-templates.png)
+![Saved Templates](./checklist/saved-template.png)
 
 > Create a folder named **`screenshots`** in the repo root and add your UI screenshots with these names:
 
